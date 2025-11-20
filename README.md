@@ -1,0 +1,2 @@
+# AdotaPet
+Sistema AdotaPet: Gerenciamento Completo de Adoção de Animais.  Projeto desenvolvido para gerenciar o fluxo de animais (disponíveis, adotados), cadastros de adotantes e o histórico de adoções. O foco é fornecer uma interface web eficiente para o controle de um centro de adoção.  Stack: Backend: Java (Spring Boot) | Banco de Dados: PostgreSQL (Supabase) | Frontend: HTML, CSS, JavaScript (Vanilla).
