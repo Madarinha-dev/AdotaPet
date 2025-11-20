@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    
+    <header>
+        <div class="div-heade-adotaPet">
+            <p class="titudo-adotaPet">
+
+                <img src="imagens/patas.png" alt="" class="img-patas">
+                AdotaPet
+            </p>
+        </div>
+    </header>
+
+    <main>
+        <div class="div-pai">
+            <div class="div-links">
+                <nav class="link" onclick="telaPrincipal()">Home</nav>
+                <nav class="link" onclick="telaAnimais()">Animais</nav>
+                <nav class="link" onclick="telaAdotantes()">Adotantes</nav>
+                <nav class="link" onclick="telaAdocoes()">Adoções</nav>
+            </div>
+
+            <div class="div-conteudo">
+
+                <div class="tela-principal" id="tela-principal">
+
+                    <div class="tela-principal-botao-nova-adocao" id="tela-principal-botao-nova-adocao">
+                        <div class="tela-principal-botao-nova-adocao-titulo">Registrar Nova Adoção</div>
+
+                        <div class="tela-principal-botao-nova-adocao-campo-01">
+                            <label for="adotante" class="tela-principal-botao-nova-adocao-campo-01-label">Adotante</label>
+                            <br>
+                            <input placeholder="Pesquise por Adotante" type="search" name="adotante" id="searchAdotante" class="tela-principal-botao-nova-adocao-campo-01-input">
+                        </div>
+                    
+                        <div class="tela-principal-botao-nova-adocao-campo-02">
+                            <label for="animal" class="tela-principal-botao-nova-adocao-campo-02-label">Animal</label>
+                            <br>
+                            <input placeholder="Pesquise pelo Animal" type="search" name="animal" id="searchAnimal" class="tela-principal-botao-nova-adocao-campo-02-input">
+                        </div>
+
+                        <div class="tela-principal-botao-nova-adocao-salvar">
+                            <div class="tela-principal-botao-nova-adocao-salvar-confirmar-adocao" onclick="salvarNovaAdocao()">Confirmar Adoção</div>
+                        </div>
+
+                    </div>
+
+                    <div class="tela-principal-primeira-linha">
+                        <!-- 2 elementos, notificação e Nova adoção -->
+                         <!-- <p class="tela-principal-primeira-linha-nova-adocao">Nova adoção</p> -->
+                          <div class="tela-principal-primeira-linha-div-notificacao">Notificação</div>
+                          <div class="tela-principal-primeira-linha-div-nova-adocao" onclick="novaAdocao()">Nova adoção</div>
+                    </div>
+
+                    <div class="tela-principal-segunda-linha">
+                        <div class="tela-principal-segunda-linha-bem-vindo">Bem-vindo, Fhellype</div>
+                    </div>
+
+                    <div class="tela-principal-terceira-linha">
+                        <!-- Logo abaixo da linha central [ Estatísticas ] -->
+                         <div class="tela-principal-terceira-linha-valor">
+                            <div class="tela-principal-terceira-linha-valor-texto">Animais disponíveis</div>
+                            <div class="tela-principal-terceira-linha-valor-valor">[x]</div>
+                        </div>
+
+                         <div class="tela-principal-terceira-linha-valor">
+                            <div class="tela-principal-terceira-linha-valor-texto">Adotantes no limites</div>
+                            <div class="tela-principal-terceira-linha-valor-valor">[x]</div>
+                        </div>
+                            
+                         <div class="tela-principal-terceira-linha-valor">
+                            <div class="tela-principal-terceira-linha-valor-texto">Animais adotados...</div>
+                            <div class="tela-principal-terceira-linha-valor-valor">[x]</div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="tela-animais" id="tela-animais">
+
+                    <!-- Adicionar um novo animal  -->
+                    <div class="tela-animal-botao-novo-animal" id="tela-animal-botao-novo-animal">
+                        <div class="tela-animal-botao-novo-animal-titulo">Novo Animal</div>
+
+                        <div class="tela-animal-botao-novo-animal-campo-01">
+                            <label for="nomeAnimal" class="tela-animal-botao-novo-animal-campo-01-label">Nome</label>
+                            <br>
+                            <input placeholder="Novo Animal" type="text" name="nomeAnimal" id="nomeAnimalNovo" class="tela-animal-botao-novo-animal-campo-01-input">
+                        </div>
+
+                        <div class="tela-animal-botao-novo-animal-campo-02">
+                            <label for="idadeAnimal" class="tela-animal-botao-novo-animal-campo-02-label">Idade</label>
+                            <br>
+                            <input placeholder="Idade do Animal" type="number" name="idadeAnimal" id="idadeAnimalNovo" class="tela-animal-botao-novo-animal-campo-02-input">
+                        </div>
+
+
+                        <div class="tela-animal-botao-novo-animal-select">
+                            <select class="tela-animal-botao-novo-animal-select-select" name="" id="selectTipoDeAnimal" onchange="formularioNovoAnimal()">
+                                <option value="vazio">Tipo de animal</option>
+                                <option value="cachorro">Cachorro</option>
+                                <option value="gato">Gato</option>
+                            </select>
+                        </div>
+
+                        <div class="tela-animal-botao-novo-animal-campo-03">
+                            <label for="pesoAnimal" class="tela-animal-botao-novo-animal-campo-03-label">Peso</label>
+                            <br>
+                            <input placeholder="Peso do Animal" type="number" name="pesoAnimal" id="pesoAnimalNovo" class="tela-animal-botao-novo-animal-campo-03-input">
+                        </div>
+
+                        <div class="tela-animal-botao-novo-animal-campo-04" id="tela-animal-botao-novo-animal-campo-04">
+                            <label for="racaAnimal" class="tela-animal-botao-novo-animal-campo-04-label">Raça</label>
+                            <br>
+                            <input placeholder="Raça do Animal" type="text" name="racaAnimal" id="racaAnimalNovo" class="tela-animal-botao-novo-animal-campo-04-input">
+                        </div>
+
+                        <div class="tela-animal-botao-novo-animal-campo-05" id="tela-animal-botao-novo-animal-campo-05">
+                            <label for="corDaPelagemAnimal" class="tela-animal-botao-novo-animal-campo-05-label">Cor da Pelagem</label>
+                            <br>
+                            <input placeholder="Cor da Pelagem" type="text" name="corDaPelagemAnimal" id="corDaPelagemAnimalNovo" class="tela-animal-botao-novo-animal-campo-05-input">
+                        </div>
+
+
+                        <div class="tela-animal-botao-novo-animal-salvar" onclick="salvarAnimalNovo()">
+                            <div class="tela-animal-botao-novo-animal-salvar-novo-animal">Salvar</div>
+                        </div>
+
+                    </div>
+
+
+
+
+                    <!-- Editar o animal  -->
+                    <div class="tela-animal-botao-editar-animal" id="tela-animal-botao-editar-animal">
+                        <div class="tela-animal-botao-editar-animal-titulo">Editar Animal</div>
+
+                        <div class="tela-animal-botao-editar-animal-campo-01">
+                            <label for="nomeAnimal" class="tela-animal-botao-editar-animal-campo-01-label">Nome</label>
+                            <br>
+                            <input placeholder="Novo Animal" type="text" name="nomeAnimal" id="EditarNomeAnimal" class="tela-animal-botao-editar-animal-campo-01-input">
+                        </div>
+
+                        <div class="tela-animal-botao-editar-animal-campo-02">
+                            <label for="idadeAnimal" class="tela-animal-botao-editar-animal-campo-02-label">Idade</label>
+                            <br>
+                            <input placeholder="Idade do Animal" type="number" name="idadeAnimal" id="EditarIdadeAnimal" class="tela-animal-botao-editar-animal-campo-02-input">
+                        </div>
+
+
+                        <div class="tela-animal-botao-editar-animal-select">
+                            <select class="tela-animal-botao-editar-animal-select-select" name="" id="EditarselectTipoDeAnimal" onchange="formularioEditarAnimal()">
+                                <option value="vazio">Tipo de animal</option>
+                                <option value="cachorro">Cachorro</option>
+                                <option value="gato">Gato</option>
+                            </select>
+                        </div>
+
+                        <div class="tela-animal-botao-editar-animal-campo-03">
+                            <label for="pesoAnimal" class="tela-animal-botao-editar-animal-campo-03-label">Peso</label>
+                            <br>
+                            <input placeholder="Peso do Animal" type="number" name="pesoAnimal" id="EditarPesoAnimal" class="tela-animal-botao-editar-animal-campo-03-input">
+                        </div>
+
+                        <div class="tela-animal-botao-editar-animal-campo-04" id="tela-animal-botao-editar-animal-campo-04">
+                            <label for="racaAnimal" class="tela-animal-botao-editar-animal-campo-04-label">Raça</label>
+                            <br>
+                            <input placeholder="Raça do Animal" type="text" name="racaAnimal" id="EditarRacaAnimal" class="tela-animal-botao-editar-animal-campo-04-input">
+                        </div>
+
+                        <div class="tela-animal-botao-editar-animal-campo-05" id="tela-animal-botao-editar-animal-campo-05">
+                            <label for="corDaPelagemAnimal" class="tela-animal-botao-editar-animal-campo-05-label">Cor da Pelagem</label>
+                            <br>
+                            <input placeholder="Cor da Pelagem" type="text" name="corDaPelagemAnimal" id="EditarCorDaPelagemAnimal" class="tela-animal-botao-editar-animal-campo-05-input">
+                        </div>
+
+
+                        <div class="tela-animal-botao-editar-animal-salvar" onclick="salvarEditarAnimal()">
+                            <div class="tela-animal-botao-editar-animal-salvar-novo-animal">Salvar</div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                    <div class="tela-animais-primeira-linha-gerenciamento-de-animais">
+                        Gerenciamento De Animais
+                    </div>
+
+                    <div class="tela-animais-segunda-linha">
+
+                        <div class="tela-animais-segunda-linha-buscador">
+                            <input class="tela-animais-segunda-linha-buscador-input" placeholder="Buscar por Animais ou ID" type="search" name="" id="tela-animais-segunda-linha-buscador-input">
+                        </div>
+
+                        <div class="tela-animais-segunda-linha-novo-animais" onclick="novoAnimal()">
+                            Novo Animal
+                        </div>
+
+                        <div class="tela-animais-segunda-linha-filtro">
+                            <select name="" id="Y" class="tela-animais-segunda-linha-filtro-select">
+                                <option value="">todos</option>
+                                <option value="adotado">Adotado</option>
+                                <option value="disponivel">Disponível</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                    <div class="tela-animais-terceira-linha">
+                        <div class="tela-animais-terceira-linha-div">
+
+                            <table class="tela-animais-terceira-linha-div-tabela">
+
+                                <!-- <caption class="tela-animais-terceira-linha-div-tabela-titulo">
+                                    TESTE DE EXEMPLO
+                                </caption> -->
+
+                                <thead class="tela-animais-terceira-linha-div-tabela-thead">
+                                    <tr class="tela-animais-terceira-linha-div-tabela-thead-tr">
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">ID</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">NOME</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">STATUS</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">IDADE</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">AÇÃO</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody class="tela-animais-terceira-linha-div-tabela-tbody">
+
+                                    <tr class="tela-animais-terceira-linha-div-tabela-tbody-tr">
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">01</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">Bidu</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">DISPONÌVEL</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">10</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">
+                                            <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div">
+                                                <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div-excluir" onclick="excluirAnimal()">EXCLUIR</div>
+                                                <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div-editar" onclick="editarAnimal()">EDITAR</div>
+                                            </div>
+                                        </th>
+                                    </tr>
+
+
+                                    <tr class="tela-animais-terceira-linha-div-tabela-tbody-tr">
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">02</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">DUDU</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">ADOTADO</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">12</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">
+                                            <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div">
+                                                <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div-excluir" onclick="excluirAnimal()">EXCLUIR</div>
+                                                <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div-editar" onclick="editarAnimal()">EDITAR</div>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- TELA ADOTANTES COM CLASSE ANIMAIS  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+
+                <div class="tela-animais" id="tela-adotantes">
+
+                    
+                    <div class="tela-animal-botao-novo-animal" id="tela-adotantes-botao-novo-adotante">
+                        <div class="tela-animal-botao-novo-animal-titulo">Novo adotante</div>
+
+                        <div class="tela-animal-botao-novo-animal-campo-01">
+                            <label for="nomeAdotante" class="tela-animal-botao-novo-animal-campo-01-label">Nome</label>
+                            <br>
+                            <input placeholder="Novo Adotante" type="text" name="nomeAdotante" id="nomeAdotanteNovo" class="tela-animal-botao-novo-animal-campo-01-input">
+                        </div>
+
+                        <div class="tela-animal-botao-novo-animal-campo-02">
+                            <label for="cpfAdotante" class="tela-animal-botao-novo-animal-campo-02-label">CPF</label>
+                            <br>
+                            <input placeholder="CPF do adotante" type="number" name="cpfAdotante" id="cpfAdotanteNovo" class="tela-animal-botao-novo-animal-campo-02-input">
+                        </div>
+
+
+                        <div class="tela-animal-botao-novo-animal-campo-03">
+                            <label for="enderecoNovoAdotante" class="tela-animal-botao-novo-animal-campo-03-label">Endereço</label>
+                            <br>
+                            <input placeholder="Endereço" type="text" name="enderecoNovoAdotante" id="enderecoAdotanteNovo" class="tela-animal-botao-novo-animal-campo-03-input">
+                        </div>
+
+        
+                        <div class="tela-animal-botao-novo-animal-salvar" onclick="salvarAdotanteNovo()">
+                            <div class="tela-animal-botao-novo-animal-salvar-novo-animal">Salvar</div>
+                        </div>
+
+                    </div>
+
+
+
+
+                    <!-- Editar o adotante  -->
+                    <div class="tela-animal-botao-editar-animal" id="tela-animal-botao-editar-adotante">
+                        <div class="tela-animal-botao-editar-animal-titulo">Editar Adotante</div>
+
+                        <div class="tela-animal-botao-editar-animal-campo-01">
+                            <label for="nomeAdotante" class="tela-animal-botao-editar-animal-campo-01-label">Nome</label>
+                            <br>
+                            <input placeholder="Novo Adotante" type="text" name="nomeAdotante" id="EditarNomeAdotante" class="tela-animal-botao-editar-animal-campo-01-input">
+                        </div>
+
+                        <div class="tela-animal-botao-editar-animal-campo-02">
+                            <label for="editarCpfAdotante" class="tela-animal-botao-editar-animal-campo-02-label">CPF</label>
+                            <br>
+                            <input placeholder="Editar CPF" type="number" name="editarCpfAdotante" id="editarCpfAdotante" class="tela-animal-botao-editar-animal-campo-02-input">
+                        </div>
+
+
+                        <div class="tela-animal-botao-editar-animal-campo-03">
+                            <label for="pesoAnimal" class="tela-animal-botao-editar-animal-campo-03-label">Endereço</label>
+                            <br>
+                            <input placeholder="Editar Endereço" type="text" name="editarEnderecoAdotante" id="EditarEnderecoAdotante" class="tela-animal-botao-editar-animal-campo-03-input">
+                        </div>
+
+        
+                        <div class="tela-animal-botao-editar-animal-salvar" onclick="salvarEditarAdotante()">
+                            <div class="tela-animal-botao-editar-animal-salvar-novo-animal">Salvar</div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                    <div class="tela-animais-primeira-linha-gerenciamento-de-animais">
+                        Gerenciamento De Adotantes
+                    </div>
+
+                    <div class="tela-animais-segunda-linha">
+
+                        <div class="tela-animais-segunda-linha-buscador">
+                            <input class="tela-animais-segunda-linha-buscador-input" placeholder="Buscar por nome ou CPF" type="search" name="" id="tela-adotante-segunda-linha-buscador-input">
+                        </div>
+
+                        <div class="tela-animais-segunda-linha-novo-animais" onclick="novoAdotante()">
+                            Novo Adotante
+                        </div>
+
+                        
+                    </div>
+
+
+
+                    <div class="tela-animais-terceira-linha">
+                        <div class="tela-animais-terceira-linha-div">
+
+                            <table class="tela-animais-terceira-linha-div-tabela">
+
+                            
+                                <thead class="tela-animais-terceira-linha-div-tabela-thead">
+                                    <tr class="tela-animais-terceira-linha-div-tabela-thead-tr">
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">ID</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">NOME</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">CPF</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">ADOTADOS</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">AÇÃO</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody class="tela-animais-terceira-linha-div-tabela-tbody">
+
+                                    <tr class="tela-animais-terceira-linha-div-tabela-tbody-tr">
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">01</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">Fhellype</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">111.222.333.45</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">2</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">
+                                            <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div">
+                                                <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div-excluir" onclick="excluirAdotante()">EXCLUIR</div>
+                                                <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div-editar" onclick="editarAdotante()">EDITAR</div>
+                                            </div>
+                                        </th>
+                                    </tr>
+
+                                    <tr class="tela-animais-terceira-linha-div-tabela-tbody-tr">
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">02</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">Bibi</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">111.222.333.45</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">1</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">
+                                            <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div">
+                                                <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div-excluir" onclick="excluirAdotante()">EXCLUIR</div>
+                                                <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div-editar" onclick="editarAdotante()">EDITAR</div>
+                                            </div>
+                                        </th>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                
+               
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <!-- tela Adocoes  -->
+                <div class="tela-animais" id="tela-adocoes">
+
+                    <div class="tela-animais-primeira-linha-gerenciamento-de-animais">
+                        Relatório de Adoções
+                    </div>
+
+                    <div class="tela-animais-segunda-linha">
+
+                        <div class="tela-animais-segunda-linha-buscador">
+                            <input class="tela-animais-segunda-linha-buscador-input" placeholder="Buscar por Adotante ou Animais" type="search" name="" id="tela-relatorio-segunda-linha-buscador-input">
+                        </div>
+
+                    
+                        <div class="tela-animais-segunda-linha-filtro">
+                            <select name="" id="x" class="tela-animais-segunda-linha-filtro-select">
+                                <option value="">todos</option>
+                                <option value="adotante">Adotantes</option>
+                                <option value="data">Data</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                    <div class="tela-animais-terceira-linha">
+                        <div class="tela-animais-terceira-linha-div">
+
+                            <table class="tela-animais-terceira-linha-div-tabela">
+
+                                
+
+                                <thead class="tela-animais-terceira-linha-div-tabela-thead">
+                                    <tr class="tela-animais-terceira-linha-div-tabela-thead-tr">
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">ID</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">ADOTANTE</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">ANIMAL</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">DATA</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody class="tela-animais-terceira-linha-div-tabela-tbody">
+
+                                    <tr class="tela-animais-terceira-linha-div-tabela-tbody-tr">
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">01</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">Fhellype</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">ZEUS</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">20/11/2025</th>
+                                    </tr>
+
+                                    <tr class="tela-animais-terceira-linha-div-tabela-tbody-tr">
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">01</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">Fhellype</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">ZEUS</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">20/11/2025</th>
+                                    </tr>
+
+                                    <tr class="tela-animais-terceira-linha-div-tabela-tbody-tr">
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">01</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">Fhellype</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">ZEUS</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">20/11/2025</th>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+    </main>
+
+
+</body>
+
+<script src="script.js"></script>
+
+</html>
