@@ -1,7 +1,6 @@
 services:
   - type: web
     name: adotapet-backend
-    env: java
     region: oregon # Mantenha a mesma região que você escolheu
     rootDir: AdotePetBackend/sistema # Onde o mvnw está
     plan: free # Seu plano
