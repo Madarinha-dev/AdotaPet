@@ -5,7 +5,7 @@ import com.adotapet.model.Cachorro; // Importa as subclasses
 import com.adotapet.model.Gato;     // Importa as subclasses
 import com.adotapet.service.AnimalService;
 
-import org.springframework.http.HttpStatus;
+// import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

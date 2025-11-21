@@ -3,6 +3,9 @@ const TelaAnimais = document.getElementById("tela-animais");
 const TelaAdocoes = document.getElementById("tela-adocoes");
 const TelaAdotantes = document.getElementById("tela-adotantes");
 
+// URL base da API Spring Boot rodando localmente
+const API_BASE_URL = 'http://localhost:8080';
+
 TelaAnimais.style.display = 'none';
 TelaAdocoes.style.display = 'none';
 TelaAdotantes.style.display = 'none';
@@ -151,7 +154,9 @@ function salvarAnimalNovo() {
             let idade = inputIdade.value;
             let peso = inputPeso.value;
             let raca = inputRaca.value;
+
             window.alert('Animal Salvo');
+            
             dropdawNovoAnimal.style.display = 'none';
             
 
