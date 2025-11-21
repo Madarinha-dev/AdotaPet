@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: adotapet-backend
+    env: java
+    region: oregon # Mantenha a mesma região que você escolheu
+    rootDir: AdotePetBackend/sistema # Onde o mvnw está
+    plan: free # Seu plano
+    autoDeploy: true
+    buildCommand: ./mvnw clean install
+    startCommand: java -jar target/adotaPet-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: JAVA_RUNTIME_VERSION
+        value: openjdk-21
+      - key: SERVER_PORT
+        value: "8080"
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://db.yvsflzozsbvxlkulmlrg.supabase.co:5432/postgres?sslmode=require
+      - key: SPRING_DATASOURCE_USERNAME
+        value: postgres
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: Fhellype1984
