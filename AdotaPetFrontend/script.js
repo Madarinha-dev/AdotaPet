@@ -54,6 +54,7 @@ function telaAdocoes() {
     TelaAdotantes.style.display = 'none';
     TelaAnimais.style.display = 'none';
     TelaPrincipal.style.display = 'none';
+    carregarAdocoes();
 }
 
 
@@ -623,43 +624,112 @@ function editarAnimal(id) {
 
 
 
-function salvarNovaAdocao() {
+async function salvarNovaAdocao() {
     const inputAdotante = document.getElementById("searchAdotante");
     const inputAnimal = document.getElementById("searchAnimal");
     const dropdawNovaAdocao = document.getElementById("tela-principal-botao-nova-adocao");
 
-    if (inputAdotante.value == '') {
+    const adotanteId = parseInt(inputAdotante.value.trim());
+    const animalId = parseInt(inputAnimal.value.trim());
+
+    let valid = true;
+    if (isNaN(adotanteId) || adotanteId <= 0) {
         inputAdotante.style.border = '2px solid red';
+        valid = false;
     } else {
         inputAdotante.style.border = 'none';
     }
 
-    if (inputAnimal.value == '') {
+    if (isNaN(animalId) || animalId <= 0) {
         inputAnimal.style.border = '2px solid red';
+        valid = false;
     } else {
         inputAnimal.style.border = 'none';
     }
 
-    // dados para enviar
-    let adotante = inputAdotante.value;
-    let animal = inputAnimal.value;
-
-    // Validação do servidor para salvar no banco de dados;
-
-    if (inputAdotante.value != '' && inputAnimal.value != '') {
-        window.alert("Salvo nova adoção");
-        dropdawNovaAdocao.style.display = 'none';
-
-        inputAdotante.value = '';
-        inputAnimal.value = '';
+    if (!valid) {
+        alert("Por favor, insira IDs válidos para Adotante e Animal.");
+        return;
     }
 
-    
-    // window.alert("salvar nova adoção");
-    // aqui coleta todos os dados e envia para o banco de dados
-    // Aqui faz as validaçoes se os campos não estão vazios
-    // se tiver vazio -> mostrar mensagem de erro, que tem que preencher os campos acima
-    // se tiver tudo OK -> coletar os dados, guardar nas variaveis e enviar em JSON
+    const adocaoRequest = {
+        adotanteId: adotanteId,
+        animalId: animalId
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/adocoes`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(adocaoRequest)
+        });
+
+        const responseData = await response.text(); 
+        
+        if (response.ok) {
+            const novaAdocao = JSON.parse(responseData);
+            alert(`Adoção realizada! Adotante: ${novaAdocao.adotante.nome}, Animal: ${novaAdocao.animal.nome}.`);
+            
+            dropdawNovaAdocao.style.display = 'none';
+            inputAdotante.value = '';
+            inputAnimal.value = '';
+            
+            carregarAdocoes(); 
+        } else {
+            alert(`Erro ao realizar adoção (Status ${response.status}): ${responseData}`);
+        }
+    } catch (error) {
+        console.error("Erro na comunicação com a API:", error);
+        alert(`Erro na comunicação com o servidor: ${error.message}.`);
+    }
+}
+
+function formatarData(dataISO) {
+    if (!dataISO) return '';
+
+    const partes = dataISO.split('-');
+    if (partes.length === 3) {
+        return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+    return dataISO;
+}
+
+
+async function carregarAdocoes() {
+    const tbody = document.getElementById("tbody-adocoes");
+    tbody.innerHTML = ''; 
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/adocoes`);
+        if (!response.ok) {
+            throw new Error(`Erro ao carregar adoções: ${response.statusText}`);
+        }
+        const adocoes = await response.json();
+
+        adocoes.forEach(adocao => {
+            const row = tbody.insertRow();
+            row.className = 'tela-animais-terceira-linha-div-tabela-tbody-tr';
+
+            const adotanteNome = adocao.adotante ? adocao.adotante.nome : 'Adotante Excluído';
+            const animalNome = adocao.animal ? adocao.animal.nome : 'Animal Excluído';
+
+            row.insertCell().textContent = adocao.id;
+            row.insertCell().textContent = adotanteNome;
+            row.insertCell().textContent = animalNome;
+            row.insertCell().textContent = formatarData(adocao.dataAdocao);
+            
+            // Coluna para futuras Ações (Excluir/Cancelar)
+            // row.insertCell().textContent = ''; 
+        });
+    } catch (error) {
+        console.error("Erro ao carregar adoções:", error);
+        // Exibe uma linha de erro na tabela se não conseguir carregar
+        const row = tbody.insertRow();
+        row.insertCell().colSpan = 4;
+        row.insertCell().textContent = "Falha ao carregar dados do servidor.";
+    }
 }
 
 
