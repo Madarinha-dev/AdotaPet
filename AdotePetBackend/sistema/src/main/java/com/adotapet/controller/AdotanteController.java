@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 //rota base da API para Adotantes
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/adotantes")
 public class AdotanteController {

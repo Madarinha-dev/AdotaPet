@@ -30,6 +30,7 @@ function telaPrincipal() {
     TelaAdotantes.style.display = 'none';
     TelaAnimais.style.display = 'none';
     TelaPrincipal.style.display = 'block';
+    carregarEstatisticasHome();
 }
 
 
@@ -87,6 +88,78 @@ function novaAdocao() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async function carregarEstatisticasHome() {
+    try {
+        const response = await fetch(API_BASE_URL + '/api/estatisticas');
+        
+        if (!response.ok) {
+            throw new Error(`Erro ao buscar estatísticas: Status ${response.status}`);
+        }
+        
+        const estatisticas = await response.json();
+        
+        document.getElementById('disponiveis').textContent = estatisticas.animaisDisponiveis || 0;
+        document.getElementById('adotantes-limite').textContent = estatisticas.adotantesNoLimite || 0;
+        document.getElementById('adotados').textContent = estatisticas.animaisAdotados || 0;
+
+    } catch (error) {
+        console.error('Falha ao carregar estatísticas da Home:', error);
+        window.alert('Erro ao conectar com o servidor para carregar as estatísticas.');
+        
+        // Opcional: Limpar ou definir como "Erro"
+        document.getElementById('disponiveis').textContent = '-';
+        document.getElementById('adotantes-limite').textContent = '-';
+        document.getElementById('adotados').textContent = '-';
+    }
+}
 
 
 
@@ -305,8 +378,6 @@ async function salvarAnimal() {
     const inputCorDaPelagem = document.getElementById("corDaPelagemAnimalNovo");
 
     let isValid = true;
-    
-    
     
     selectNovoAnimal.style.border = 'none';
     inputNome.style.border = 'none';
@@ -697,21 +768,34 @@ function formatarData(dataISO) {
 }
 
 
-async function carregarAdocoes() {
-    const tbody = document.getElementById("tbody-adocoes");
+async function carregarAdocoes(urlBusca = `${API_BASE_URL}/api/adocoes`) { 
+    const tbody = document.getElementById("tbody-adocoes"); 
+    
     tbody.innerHTML = ''; 
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/adocoes`);
+        const response = await fetch(urlBusca); 
+        
         if (!response.ok) {
             throw new Error(`Erro ao carregar adoções: ${response.statusText}`);
         }
+        
         const adocoes = await response.json();
+
+        if (adocoes.length === 0) {
+             const row = tbody.insertRow();
+             const cell = row.insertCell();
+             // ColSpan deve ser o número de colunas na tabela (ID, ADOTANTE, ANIMAL, DATA)
+             cell.colSpan = 4; 
+             cell.textContent = "Nenhum resultado encontrado para o filtro aplicado.";
+             return;
+        }
 
         adocoes.forEach(adocao => {
             const row = tbody.insertRow();
             row.className = 'tela-animais-terceira-linha-div-tabela-tbody-tr';
 
+            // Garante que o nome aparece mesmo se o objeto relacionado tiver sido excluído
             const adotanteNome = adocao.adotante ? adocao.adotante.nome : 'Adotante Excluído';
             const animalNome = adocao.animal ? adocao.animal.nome : 'Animal Excluído';
 
@@ -719,16 +803,71 @@ async function carregarAdocoes() {
             row.insertCell().textContent = adotanteNome;
             row.insertCell().textContent = animalNome;
             row.insertCell().textContent = formatarData(adocao.dataAdocao);
-            
-            // Coluna para futuras Ações (Excluir/Cancelar)
-            // row.insertCell().textContent = ''; 
         });
     } catch (error) {
         console.error("Erro ao carregar adoções:", error);
-        // Exibe uma linha de erro na tabela se não conseguir carregar
         const row = tbody.insertRow();
-        row.insertCell().colSpan = 4;
-        row.insertCell().textContent = "Falha ao carregar dados do servidor.";
+        const cell = row.insertCell();
+        cell.colSpan = 4;
+        cell.textContent = "Falha ao carregar dados do servidor.";
+    }
+}
+
+
+
+function alternarCamposFiltro() {
+    const tipoFiltro = document.getElementById('filtroAdocoes').value;
+    const camposData = document.getElementById('camposDataAdocao');
+    const inputBusca = document.getElementById('tela-relatorio-segunda-linha-buscador-input');
+
+    inputBusca.value = '';
+    camposData.style.display = 'none';
+
+    if (tipoFiltro === 'data') {
+        camposData.style.display = 'block';
+        inputBusca.style.display = 'none';
+        
+        carregarAdocoes(); 
+        
+    } else {
+        inputBusca.style.display = 'block';
+    }
+}
+
+
+async function iniciarBuscaAdocoes(event) {
+    const tipoFiltro = document.getElementById('filtroAdocoes').value;
+    const inputBusca = document.getElementById('tela-relatorio-segunda-linha-buscador-input');
+    let url = `${API_BASE_URL}/api/adocoes`;
+
+    if (tipoFiltro === 'todos') {
+        if (inputBusca.value.trim() === '') {
+            carregarAdocoes();
+        } else {
+            return;
+        }
+
+    } else if (tipoFiltro === 'adotante') {
+        const adotanteId = parseInt(inputBusca.value.trim());
+        
+        if (adotanteId > 0 && inputBusca.value.trim() !== '') {
+            url = `${API_BASE_URL}/api/adocoes/adotante/${adotanteId}`;
+            await carregarAdocoes(url);
+        } else if (inputBusca.value.trim() === '') {
+            await carregarAdocoes();
+        }
+
+    } else if (tipoFiltro === 'data') {
+        
+        const dataInicio = document.getElementById('dataInicio').value;
+        const dataFim = document.getElementById('dataFim').value;
+
+        if (dataInicio && dataFim) {
+            url = `${API_BASE_URL}/api/adocoes/periodo?inicio=${dataInicio}&fim=${dataFim}`;
+            await carregarAdocoes(url);
+        } else {
+            await carregarAdocoes(); 
+        }
     }
 }
 

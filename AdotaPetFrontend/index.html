@@ -29,8 +29,11 @@
 
             <div class="div-conteudo">
 
-                <div class="tela-principal" id="tela-principal">
 
+
+
+
+                <div class="tela-principal" id="tela-principal">
                     <div class="tela-principal-botao-nova-adocao" id="tela-principal-botao-nova-adocao">
                         <div class="tela-principal-botao-nova-adocao-titulo">Registrar Nova Adoção</div>
 
@@ -55,7 +58,7 @@
                     <div class="tela-principal-primeira-linha">
                         <!-- 2 elementos, notificação e Nova adoção -->
                          <!-- <p class="tela-principal-primeira-linha-nova-adocao">Nova adoção</p> -->
-                          <div class="tela-principal-primeira-linha-div-notificacao">Notificação</div>
+                          <!-- <div class="tela-principal-primeira-linha-div-notificacao">Notificação</div> -->
                           <div class="tela-principal-primeira-linha-div-nova-adocao" onclick="novaAdocao()">Nova adoção</div>
                     </div>
 
@@ -67,17 +70,17 @@
                         <!-- Logo abaixo da linha central [ Estatísticas ] -->
                          <div class="tela-principal-terceira-linha-valor">
                             <div class="tela-principal-terceira-linha-valor-texto">Animais disponíveis</div>
-                            <div class="tela-principal-terceira-linha-valor-valor">[x]</div>
+                            <div class="tela-principal-terceira-linha-valor-valor" id="disponiveis"></div>
                         </div>
 
                          <div class="tela-principal-terceira-linha-valor">
                             <div class="tela-principal-terceira-linha-valor-texto">Adotantes no limites</div>
-                            <div class="tela-principal-terceira-linha-valor-valor">[x]</div>
+                            <div class="tela-principal-terceira-linha-valor-valor" id="adotantes-limite"></div>
                         </div>
                             
                          <div class="tela-principal-terceira-linha-valor">
                             <div class="tela-principal-terceira-linha-valor-texto">Animais adotados...</div>
-                            <div class="tela-principal-terceira-linha-valor-valor">[x]</div>
+                            <div class="tela-principal-terceira-linha-valor-valor" id="adotados"></div>
                         </div>
                     </div>
                 </div>
@@ -165,7 +168,7 @@
                         <div class="tela-animal-botao-novo-animal-campo-03">
                             <label for="porteAnimal" class="tela-animal-botao-novo-animal-campo-03-label">Porte</label>
                             <br>
-                            <input placeholder="Porte do Animal" type="text" name="porteAnimal" id="porteAnimalNovo" class="tela-animal-botao-novo-animal-campo-03-input">
+                            <input placeholder="Porte do Animal" type="text" name="porteAnimal" id="pesoAnimalNovo" class="tela-animal-botao-novo-animal-campo-03-input">
                         </div>
 
                         <div class="tela-animal-botao-novo-animal-campo-04" id="tela-animal-botao-novo-animal-campo-04">
@@ -524,28 +527,36 @@
                     <div class="tela-animais-segunda-linha">
 
                         <div class="tela-animais-segunda-linha-buscador">
-                            <input class="tela-animais-segunda-linha-buscador-input" placeholder="Buscar por Adotante ou Animais" type="search" name="" id="tela-relatorio-segunda-linha-buscador-input">
+                            <input class="tela-animais-segunda-linha-buscador-input" 
+                                placeholder="Buscar por Adotante ou Animais" 
+                                type="search" 
+                                name="" 
+                                id="tela-relatorio-segunda-linha-buscador-input"
+                                onkeyup="iniciarBuscaAdocoes(event)">
                         </div>
 
-                    
+    
                         <div class="tela-animais-segunda-linha-filtro">
-                            <select name="" id="x" class="tela-animais-segunda-linha-filtro-select">
-                                <option value="">todos</option>
-                                <option value="adotante">Adotantes</option>
+                            <select name="" 
+                                id="filtroAdocoes" 
+                                class="tela-animais-segunda-linha-filtro-select"
+                                onchange="alternarCamposFiltro()"> <option value="todos">todos</option>
+                                <option value="adotante">ID Adotante</option>
                                 <option value="data">Data</option>
                             </select>
                         </div>
+
+                        <div id="camposDataAdocao" style="display: none;">
+                            <input type="date" id="dataInicio" class="tela-animais-segunda-linha-buscador-input" placeholder="Data Inicial" onchange="iniciarBuscaAdocoes()">
+                            <input type="date" id="dataFim" class="tela-animais-segunda-linha-buscador-input" placeholder="Data Final" onchange="iniciarBuscaAdocoes()">
+                        </div>
+
                     </div>
-
-
 
                     <div class="tela-animais-terceira-linha">
                         <div class="tela-animais-terceira-linha-div">
 
                             <table class="tela-animais-terceira-linha-div-tabela">
-
-                                
-
                                 <thead class="tela-animais-terceira-linha-div-tabela-thead">
                                     <tr class="tela-animais-terceira-linha-div-tabela-thead-tr">
                                         <th class="tela-animais-terceira-linha-div-tabela-thead-th">ID</th>
@@ -556,26 +567,17 @@
                                 </thead>
 
                                 <tbody class="tela-animais-terceira-linha-div-tabela-tbody" id="tbody-adocoes">
-
-                                    <tr class="tela-animais-terceira-linha-div-tabela-tbody-tr">
-                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">01</th>
-                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">Fhellype</th>
-                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">ZEUS</th>
-                                        <th class="tela-animais-terceira-linha-div-tabela-tbody-tr-th">20/11/2025</th>
-                                    </tr>
-
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
+
+
             </div>
         </div>
-        
     </main>
-
-
 </body>
 
 <script src="script.js"></script>

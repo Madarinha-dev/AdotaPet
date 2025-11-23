@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 // Define que esta classe é um Controller e mapeia todas as requisições que começam com /api/animais
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/animais")
 public class AnimalController {
