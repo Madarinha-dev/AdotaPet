@@ -5,6 +5,8 @@ const TelaAdotantes = document.getElementById("tela-adotantes");
 
 // URL base da API Spring Boot rodando localmente
 const API_BASE_URL = 'http://localhost:8080';
+let animalIdEmEdicao = null;
+let adotanteIdEmEdicao = null;
 
 TelaAnimais.style.display = 'none';
 TelaAdocoes.style.display = 'none';
@@ -36,6 +38,7 @@ function telaAnimais() {
     TelaAdotantes.style.display = 'none';
     TelaAnimais.style.display = 'block';
     TelaPrincipal.style.display = 'none';
+    carregarAnimais();
 }
 
 function telaAdotantes() {
@@ -43,6 +46,7 @@ function telaAdotantes() {
     TelaAdotantes.style.display = 'block';
     TelaAnimais.style.display = 'none';
     TelaPrincipal.style.display = 'none';
+    carregarAdotantes();
 }
 
 function telaAdocoes() {
@@ -64,30 +68,212 @@ function novaAdocao() {
     }
 }
 
-function novoAnimal() {
-    const botaoNovoAnimal = document.getElementById('tela-animal-botao-novo-animal');
-    const selectNovoAnimal = document.getElementById('selectTipoDeAnimal');
-    const inputNome = document.getElementById('nomeAnimalNovo');
-    const inputIdade = document.getElementById('idadeAnimalNovo');
-    const inputPeso = document.getElementById('pesoAnimalNovo');
-    // const divRaca = document.getElementById("tela-animal-botao-novo-animal-campo-04");
-    const inputRaca = document.getElementById("racaAnimalNovo");
-    // const divCorDaPelagem = document.getElementById("tela-animal-botao-novo-animal-campo-05");
-    const inputCorDaPelagem = document.getElementById("corDaPelagemAnimalNovo");
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async function carregarAnimais() {
+    if (TelaAnimais.style.display !== 'block') {
+        return; 
+    }
     
-    if (botaoNovoAnimal.style.display == 'block') {
-        botaoNovoAnimal.style.display = 'none';
-    } else {
-        botaoNovoAnimal.style.display = 'block';
+    try {
+        const response = await fetch(API_BASE_URL + '/api/animais/disponiveis');
+        
+        if (!response.ok) {
+            throw new Error(`Erro ao buscar animais: Status ${response.status}`);
+        }
+        
+        const animais = await response.json();
+        
+        renderizarListaAnimais(animais);
+        
+    } catch (error) {
+        console.error('Falha ao carregar animais:', error);
+        window.alert('Não foi possível conectar ou buscar os animais disponíveis.');
+    }
+}
+
+function renderizarListaAnimais(animais) {
+    const tabelaBody = document.getElementById('tabela-corpo-animais'); 
+    
+    if (!tabelaBody) return; 
+    
+    tabelaBody.innerHTML = ''; 
+
+    if (animais.length === 0) {
+        const emptyRow = tabelaBody.insertRow();
+        const cell = emptyRow.insertCell();
+        cell.colSpan = 5; // as 5 colunas (ID, NOME, STATUS, IDADE, AÇÃO)
+        cell.innerHTML = 'Nenhum animal disponível no momento.';
+        cell.style.textAlign = 'center';
+        return;
     }
 
-    inputNome.value = '';
-    inputIdade.value = '';
-    inputPeso.value = '';
-    inputRaca.value = '';
-    inputCorDaPelagem.value = '';
+    animais.forEach(animal => {
+        // Cria uma nova linha na tabela
+        const novaLinha = tabelaBody.insertRow();
+        // Adiciona a classe de estilo
+        novaLinha.classList.add('tela-animais-terceira-linha-div-tabela-tbody-tr');
+        
+        // Célula 1: ID
+        novaLinha.insertCell().innerHTML = animal.id;
+        
+        // Célula 2: NOME
+        novaLinha.insertCell().innerHTML = animal.nome;
+        
+        // Célula 3: STATUS 
+        novaLinha.insertCell().innerHTML = animal.status;
+        
+        // Célula 4: IDADE
+        novaLinha.insertCell().innerHTML = animal.idade;
+        
+        // Célula 5: AÇÃO (Botões de Editar/Excluir)
+        const cellAcao = novaLinha.insertCell();
+        cellAcao.innerHTML = `
+            <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div">
+                <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div-excluir" 
+                     onclick="excluirAnimal(${animal.id})">EXCLUIR</div>
+                <div class="tela-animais-terceira-linha-div-tabela-tbody-tr-th-div-editar" 
+                     onclick="editarAnimal(${animal.id})">EDITAR</div>
+            </div>
+        `;
+    });
+}
+
+
+
+
+
+
+
+function novoAnimal() {
+    const dropdawNovoAnimal = document.getElementById("tela-animal-botao-novo-animal");
+    
+    if (dropdawNovoAnimal.style.display === 'none' || animalIdEmEdicao !== null) {
+        limparFormularioAnimal(); 
+        dropdawNovoAnimal.style.display = 'block';
+    } else {
+        dropdawNovoAnimal.style.display = 'none';
+    }
+}
+
+function limparFormularioAnimal() {
+    animalIdEmEdicao = null;
+    document.getElementById('selectTipoDeAnimal').value = 'vazio';
+    document.getElementById('nomeAnimalNovo').value = '';
+    document.getElementById('idadeAnimalNovo').value = '';
+    document.getElementById('pesoAnimalNovo').value = '';
+    document.getElementById("racaAnimalNovo").value = '';
+    document.getElementById("corDaPelagemAnimalNovo").value = '';
+
+    document.getElementById('selectTipoDeAnimal').style.border = 'none';
+    document.getElementById('nomeAnimalNovo').style.border = 'none';
+    document.getElementById('idadeAnimalNovo').style.border = 'none';
+    document.getElementById('pesoAnimalNovo').style.border = 'none';
+    document.getElementById("racaAnimalNovo").style.border = 'none';
+    document.getElementById("corDaPelagemAnimalNovo").style.border = 'none';
+
+    document.querySelector('#tela-animal-botao-novo-animal .tela-animal-botao-novo-animal-titulo').textContent = 'Novo Animal';
+    formularioNovoAnimal(); 
 }
 
 
@@ -108,106 +294,161 @@ function formularioNovoAnimal() {
     }
 }
 
-function salvarAnimalNovo() {
+async function salvarAnimal() {
     const dropdawNovoAnimal = document.getElementById("tela-animal-botao-novo-animal");
     const selectNovoAnimal = document.getElementById('selectTipoDeAnimal');
     const inputNome = document.getElementById('nomeAnimalNovo');
     const inputIdade = document.getElementById('idadeAnimalNovo');
-    const inputPeso = document.getElementById('pesoAnimalNovo');
-    // const divRaca = document.getElementById("tela-animal-botao-novo-animal-campo-04");
+    const inputDescricaoPorte = document.getElementById('pesoAnimalNovo'); 
     const inputRaca = document.getElementById("racaAnimalNovo");
-    // const divCorDaPelagem = document.getElementById("tela-animal-botao-novo-animal-campo-05");
     const inputCorDaPelagem = document.getElementById("corDaPelagemAnimalNovo");
 
-    if (selectNovoAnimal.value == 'vazio') {
+    let isValid = true;
+    
+    
+    
+    selectNovoAnimal.style.border = 'none';
+    inputNome.style.border = 'none';
+    inputIdade.style.border = 'none';
+    inputDescricaoPorte.style.border = 'none';
+    inputRaca.style.border = 'none';
+    inputCorDaPelagem.style.border = 'none';
+
+
+    if (selectNovoAnimal.value === 'vazio') {
         selectNovoAnimal.style.border = '2px solid red';
-    } else {
-        selectNovoAnimal.style.border = 'none';
+        isValid = false;
     }
 
-    if (inputNome.value == '') {
+    
+    if (inputNome.value.trim() === '') {
         inputNome.style.border = '2px solid red';
-    } else {
-        inputNome.style.border = 'none';
+        isValid = false;
     }
 
-    if (inputIdade.value == '') {
+    
+    const idade = parseInt(inputIdade.value);
+    if (inputIdade.value.trim() === '' || isNaN(idade) || idade < 0) {
         inputIdade.style.border = '2px solid red';
-    } else {
-        inputIdade.style.border = 'none';
+        isValid = false;
+    }
+    
+    
+    const descricaoPorte = inputDescricaoPorte.value.trim();
+    if (descricaoPorte === '') {
+        inputDescricaoPorte.style.border = '2px solid red';
+        isValid = false;
     }
 
-    if (inputPeso.value == '') {
-        inputPeso.style.border = '2px solid red';
-    } else {
-        inputPeso.style.border = 'none';
-    }
-
-    if (selectNovoAnimal.value == 'cachorro') {
-        if (inputRaca.value == '') {
+    if (selectNovoAnimal.value === 'cachorro') {
+        if (inputRaca.value.trim() === '') {
             inputRaca.style.border = '2px solid red';
-        } else {
-            inputRaca.style.border = 'none';
-
-            let tipoDeAnimal = selectNovoAnimal.value;
-            let nome = inputNome.value;
-            let idade = inputIdade.value;
-            let peso = inputPeso.value;
-            let raca = inputRaca.value;
-
-            window.alert('Animal Salvo');
-            
-            dropdawNovoAnimal.style.display = 'none';
-            
-
+            isValid = false;
         }
-    } else if (selectNovoAnimal.value == 'gato') {
-        if (inputCorDaPelagem.value == '') {
+    } else if (selectNovoAnimal.value === 'gato') {
+        if (inputCorDaPelagem.value.trim() === '') {
             inputCorDaPelagem.style.border = '2px solid red';
-        } else {
-            inputCorDaPelagem.style.border = 'none';
-
-            let tipoDeAnimal = selectNovoAnimal.value;
-            let nome = inputNome.value;
-            let idade = inputIdade.value;
-            let peso = inputPeso.value;
-            let CorDaPelagem = inputCorDaPelagem.value;
-
-            window.alert('Animal Salvo');
-            dropdawNovoAnimal.style.display = 'none';
-
+            isValid = false;
         }
     }
+
+
+    if (!isValid) {
+        window.alert('Preencha todos os campos obrigatórios corretamente.');
+        return; 
+    }
+    
+    let dadosAnimal = {
+        nome: inputNome.value.trim(),
+        idade: idade,
+        porte: descricaoPorte, 
+        status: "DISPONIVEL" 
+    };
+
+    if (selectNovoAnimal.value === 'cachorro') {
+        dadosAnimal.raca = inputRaca.value.trim();
+    } else if (selectNovoAnimal.value === 'gato') {
+        dadosAnimal.corDaPelagem = inputCorDaPelagem.value.trim();
+    }
+    
+    
+    let url;
+    let method;
+    let successMessage;
+    
+    if (typeof animalIdEmEdicao !== 'undefined' && animalIdEmEdicao !== null) {
+        url = API_BASE_URL + `/api/animais/${animalIdEmEdicao}`;
+        method = 'PUT';
+        successMessage = `Animal ID: ${animalIdEmEdicao} atualizado com sucesso!`;
+    } else {
+        url = API_BASE_URL + '/api/animais';
+        method = 'POST';
+        successMessage = `${selectNovoAnimal.value === 'cachorro' ? 'Cachorro' : 'Gato'} salvo com sucesso!`;
+    }
+    
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dadosAnimal),
+        });
+
+        if (response.ok) {
+            window.alert(successMessage);
+            
+            limparFormularioAnimal(); 
+            dropdawNovoAnimal.style.display = 'none';
+            carregarAnimais();
+
+        } else {
+            const errorText = await response.text();
+            window.alert(`Erro ao salvar/atualizar o animal. Status: ${response.status}. Detalhes no console.`);
+            console.error('Erro de Servidor: ', response.status, errorText);
+        }
+    } catch (error) {
+        console.error('Erro de conexão: ', error);
+        window.alert("Erro de conexão com a API (O Backend não está ligado?)");
+    }
 }
 
 
 
 
 
-function editarAnimal() {
-    const dropdawEditarAnimal = document.getElementById("tela-animal-botao-editar-animal");
-    const selectEditarAnimal = document.getElementById("EditarselectTipoDeAnimal");
-    const inputNome = document.getElementById("EditarNomeAnimal");
-    const inputIdade = document.getElementById("EditarIdadeAnimal");
-    const inputPeso = document.getElementById("EditarPesoAnimal");
-    const inputCorDaPelagem = document.getElementById("EditarCorDaPelagemAnimal");
-    const inputRaca = document.getElementById("EditarRacaAnimal");
 
-    if (dropdawEditarAnimal.style.display == 'none') {
-        dropdawEditarAnimal.style.display = 'block';
-    } else {
-        dropdawEditarAnimal.style.display = 'none';
+
+function excluirAnimal(id) {
+    if (!confirm(`Tem certeza que deseja EXCLUIR o animal ID: ${id}?`)) {
+        return; // Usuário cancelou
     }
 
-    selectEditarAnimal.value = 'vazio';
-    inputNome.value = '';
-    inputCorDaPelagem.value = '';
-    inputIdade.value = '';
-    inputPeso.value = '';
-    inputRaca.value = '';
+    fetch(API_BASE_URL + `/api/animais/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }).then(response => {
+        if (response.ok) {
+            window.alert(`Animal ID: ${id} excluído com sucesso!`);
+            // Recarrega a lista para remover o animal excluído da tela
+            carregarAnimais(); 
 
-
+        } else if (response.status === 404) {
+            window.alert("Erro: Animal não encontrado (ID inválido ou já excluído).");
+        } else {
+            window.alert(`Erro ao excluir o animal. Status: ${response.status}`);
+            console.error('Erro de servidor ao excluir: ', response.status);
+        }
+    }).catch(error => {
+        console.error('Erro de conexão ao excluir:', error);
+        window.alert("Erro de conexão com a API ao tentar excluir.");
+    });
 }
+
+
+
 
 
 function formularioEditarAnimal() {
@@ -229,74 +470,156 @@ function formularioEditarAnimal() {
 }
 
 function salvarEditarAnimal() {
-    const dropdawEditarAnimal = document.getElementById("tela-animal-botao-editar-animal");
-    const selectEditarAnimal = document.getElementById("EditarselectTipoDeAnimal");
-    const inputNome = document.getElementById("EditarNomeAnimal");
-    const inputIdade = document.getElementById("EditarIdadeAnimal");
-    const inputPeso = document.getElementById("EditarPesoAnimal");
-    const divCorDaPelagem = document.getElementById("tela-animal-botao-editar-animal-campo-05");
-    const inputCorDaPelagem = document.getElementById("EditarCorDaPelagemAnimal");
-    const divRaca = document.getElementById("tela-animal-botao-editar-animal-campo-04");
+    if (animalIdEmEdicao === null) {
+        window.alert("Erro: Nenhum animal selecionado para edição.");
+        return;
+    }
+
+    const selectTipo = document.getElementById('EditarselectTipoDeAnimal');
+    const inputNome = document.getElementById('EditarNomeAnimal');
+    const inputIdade = document.getElementById('EditarIdadeAnimal');
+    const inputPorte = document.getElementById('EditarPorteAnimal');
     const inputRaca = document.getElementById("EditarRacaAnimal");
+    const inputCorDaPelagem = document.getElementById("EditarCorDaPelagemAnimal");
+    const dropdawEditarAnimal = document.getElementById("tela-animal-botao-editar-animal");
 
-    if (selectEditarAnimal.value == 'vazio') {
-        selectEditarAnimal.style.border = '2px solid red';
-    } else {
-        selectEditarAnimal.style.border = 'none';
+    
+    if (selectTipo.value == 'vazio' || inputNome.value == '' || inputIdade.value == '' || inputPorte.value == '') {
+        window.alert('Preencha os campos obrigatórios.');
+        return;
     }
 
-    if (inputNome.value == '') {
-        inputNome.style.border = '2px solid red';
-    } else {
-        inputNome.style.border = 'none';
+    let dadosAnimal = {
+        nome: inputNome.value,
+        idade: parseInt(inputIdade.value),
+        porte: inputPorte.value,
+        status: "DISPONIVEL"
+    };
+
+    if (selectTipo.value === 'cachorro') {
+        if (inputRaca.value === '') { window.alert('Preencha a Raça.'); return; }
+        dadosAnimal.raca = inputRaca.value;
+    } else if (selectTipo.value === 'gato') {
+        if (inputCorDaPelagem.value === '') { window.alert('Preencha a Cor da Pelagem.'); return; }
+        dadosAnimal.corDaPelagem = inputCorDaPelagem.value;
     }
 
-    if (inputIdade.value == '') {
-        inputIdade.style.border = '2px solid red';
-    } else {
-        inputIdade.style.border = 'none';
-    }
-
-    if (inputPeso.value == '') {
-        inputPeso.style.border = '2px solid red';
-    } else {
-        inputPeso.style.border = 'none';
-    }
-
-    if (selectEditarAnimal.value == 'cachorro') {
-        if (inputRaca.value == '') {
-            inputRaca.style.border = '2px solid red';
+    // Chamada PUT para a API
+    fetch(API_BASE_URL + `/api/animais/${animalIdEmEdicao}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dadosAnimal),
+    }).then(response => {
+        if (response.ok) {
+            window.alert(`Animal ID: ${animalIdEmEdicao} atualizado com sucesso!`);
+            dropdawEditarAnimal.style.display = 'none'; 
+            carregarAnimais(); 
+            animalIdEmEdicao = null; // Limpa o ID em edição
         } else {
-            inputRaca.style.border = 'none';
-
-            let tipoDeAnimal = selectEditarAnimal.value;
-            let nome = inputNome.value;
-            let idade = inputIdade.value;
-            let peso = inputPeso.value;
-            let raca = inputRaca.value;
-            window.alert('Animal Editado.');
-            dropdawEditarAnimal.style.display = 'none';
-            
-
+            window.alert("Erro ao atualizar animal! Verifique o console.");
+            console.error('Erro de Servidor: ', response.status);
+            return response.json().then(data => console.error(data));
         }
-    } else if (selectEditarAnimal.value == 'gato') {
-        if (inputCorDaPelagem.value == '') {
-            inputCorDaPelagem.style.border = '2px solid red';
-        } else {
-            inputCorDaPelagem.style.border = 'none';
-
-            let tipoDeAnimal = selectEditarAnimal.value;
-            let nome = inputNome.value;
-            let idade = inputIdade.value;
-            let peso = inputPeso.value;
-            let CorDaPelagem = inputCorDaPelagem.value;
-
-            window.alert('Animal Editado.');
-            dropdawEditarAnimal.style.display = 'none';
-
-        }
-    }
+    }).catch(error => {
+        console.error('Erro de conexão: ', error);
+        window.alert("Erro de conexão com a API.");
+    });
 }
+
+
+function editarAnimal(id) {
+    animalIdEmEdicao = id; 
+
+    const dropdawEditarAnimal = document.getElementById("tela-animal-botao-editar-animal");
+    if (dropdawEditarAnimal) {
+        dropdawEditarAnimal.style.display = 'block';
+    }
+
+    // 3. Busca dados do animal (GET)
+    fetch(API_BASE_URL + `/api/animais/${id}`).then(response => {
+            if (!response.ok) {
+                throw new Error('Animal não encontrado.');
+            }
+            return response.json();
+        }).then(animal => {
+            // 4. Preenche os campos do formulário com os dados
+            document.getElementById('EditarNomeAnimal').value = animal.nome;
+            document.getElementById('EditarIdadeAnimal').value = animal.idade;
+            document.getElementById('EditarPorteAnimal').value = animal.porte;
+
+            const selectTipo = document.getElementById('EditarselectTipoDeAnimal');
+            
+            // se é Cachorro ou Gato
+            if (animal.raca) {
+                selectTipo.value = 'cachorro';
+                document.getElementById('EditarRacaAnimal').value = animal.raca;
+            } else if (animal.corDaPelagem) {
+                selectTipo.value = 'gato';
+                document.getElementById('EditarCorDaPelagemAnimal').value = animal.corDaPelagem;
+            } else {
+                selectTipo.value = 'vazio';
+            }
+
+            // Chama função para mostrar/esconder os campos de Raça/Pelagem
+            formularioEditarAnimal(); 
+
+        })
+        .catch(error => {
+            console.error('Erro ao carregar dados do animal para edição:', error);
+            window.alert('Erro ao carregar dados. Verifique se o Backend está ativo.');
+        });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -339,108 +662,303 @@ function salvarNovaAdocao() {
     // se tiver tudo OK -> coletar os dados, guardar nas variaveis e enviar em JSON
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function novoAdotante() {
     const dropdawNovoAdotante = document.getElementById("tela-adotantes-botao-novo-adotante");
+    
+    // Se o formulário estiver oculto OU em modo de edição, exibe e limpa para criação
+    if (dropdawNovoAdotante.style.display === 'none' || adotanteIdEmEdicao !== null) {
+        limparFormularioAdotante(); // Garante que está limpo e no modo de Criação
+        dropdawNovoAdotante.style.display = 'block';
+    } else {
+        // Se já estiver aberto e no modo de Criação, esconde
+        dropdawNovoAdotante.style.display = 'none';
+    }
+}
+
+
+async function salvarAdotante() {
+    const nome = document.getElementById('nomeAdotanteNovo').value.trim();
+    const cpf = document.getElementById('cpfAdotanteNovo').value.trim();
+    const endereco = document.getElementById('enderecoAdotanteNovo').value.trim();
+
+    let isValid = true;
+    
     const inputNome = document.getElementById('nomeAdotanteNovo');
     const inputCpf = document.getElementById('cpfAdotanteNovo');
     const inputEndereco = document.getElementById('enderecoAdotanteNovo');
 
-    
-    if (dropdawNovoAdotante.style.display == 'none' || dropdawNovoAdotante.style.display == '') {
-        dropdawNovoAdotante.style.display = 'block';
-    } else if (dropdawNovoAdotante.style.display == 'block') {
-        dropdawNovoAdotante.style.display = 'none';
+    inputNome.style.border = 'none';
+    inputCpf.style.border = 'none';
+    inputEndereco.style.border = 'none';
+
+    if (nome === '') {
+        inputNome.style.border = '2px solid red';
+        isValid = false;
+    }
+    if (cpf.length !== 11) {
+        inputCpf.style.border = '2px solid red';
+        isValid = false;
+    }
+    if (endereco === '') {
+        inputEndereco.style.border = '2px solid red';
+        isValid = false;
     }
 
-    inputCpf.value = '';
-    inputEndereco.value = '';
-    inputNome.value = '';
+    if (!isValid) {
+        window.alert("Por favor, preencha todos os campos corretamente (CPF deve ter 11 dígitos).");
+        return; 
+    }
+
+    const adotanteData = {
+        nome: nome,
+        cpf: cpf,
+        endereco: endereco,
+        quantidadeDeAnimaisAdotados: 0 
+    };
+
+    let url = API_BASE_URL + '/api/adotantes';
+    let method = 'POST';
+    let successMessage = 'Adotante cadastrado com sucesso!';
+
+    // Se estiver em modo de edição:
+    if (adotanteIdEmEdicao !== null) {
+        url = API_BASE_URL + `/api/adotantes/${adotanteIdEmEdicao}`;
+        method = 'PUT';
+        successMessage = 'Adotante atualizado com sucesso!';
+        
+        adotanteData.id = adotanteIdEmEdicao; 
+    }
+
+
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(adotanteData),
+        });
+
+        if (response.ok) {
+            window.alert(successMessage);
+            
+            limparFormularioAdotante();
+            carregarAdotantes();
+            
+        } else if (response.status === 404 && method === 'PUT') {
+            window.alert('Erro: Adotante não encontrado para atualização.');
+        } else {
+            const errorText = await response.text();
+            window.alert(`Erro ao salvar/atualizar adotante. Status: ${response.status}\nDetalhes: ${errorText.substring(0, 100)}...`);
+        }
+    } catch (error) {
+        console.error('Erro de conexão:', error);
+        window.alert("Erro de conexão com a API. Verifique se o Backend está ligado.");
+    }
 }
 
-function salvarAdotanteNovo() {
+async function carregarAdotantes() {
+    const tabelaCorpo = document.getElementById('tabela-corpo-adotantes');
+    if (!tabelaCorpo) {
+        return;
+    }
+    
+    tabelaCorpo.innerHTML = '';
+    
+    try {
+        const response = await fetch(API_BASE_URL + '/api/adotantes');
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
+        }
+        
+        const adotantes = await response.json();
+        
+        adotantes.forEach(adotante => {
+            const novaLinha = tabelaCorpo.insertRow();
+            
+            // 1. ID
+            novaLinha.insertCell().textContent = adotante.id;
+            
+            // 2. NOME
+            novaLinha.insertCell().textContent = adotante.nome;
+            
+            // 3. CPF
+            novaLinha.insertCell().textContent = adotante.cpf;
+            
+            // 4. ENDEREÇO
+            novaLinha.insertCell().textContent = adotante.endereco;
+            
+            // 5. ADOTADOS 
+            novaLinha.insertCell().textContent = adotante.quantidadeDeAnimaisAdotados;
+
+            // 6. AÇÕES (Botões)
+            const celulaAcoes = novaLinha.insertCell();
+            
+            // Botão EDITAR
+            const btnEditar = document.createElement('button');
+            btnEditar.textContent = 'Editar';
+            btnEditar.classList.add('btn', 'btn-editar');
+            
+            btnEditar.onclick = () => iniciarEdicaoAdotante(adotante.id);
+            celulaAcoes.appendChild(btnEditar);
+            
+            // Botão EXCLUIR
+            const btnExcluir = document.createElement('button');
+            btnExcluir.textContent = 'Excluir';
+            btnExcluir.classList.add('btn', 'btn-excluir');
+            // IMPORTANTE: Passa o ID para a função de exclusão
+            btnExcluir.onclick = () => excluirAdotante(adotante.id, adotante.nome);
+            celulaAcoes.appendChild(btnExcluir);
+        });
+
+    } catch (error) {
+        console.error('Erro ao carregar adotantes:', error);
+        window.alert('Não foi possível carregar a lista de adotantes. Verifique o console.');
+    }
+}
+
+
+
+async function excluirAdotante(id, nome) {
+    if (!confirm(`Tem certeza que deseja excluir o adotante: ${nome} (ID: ${id})?`)) {
+        return; 
+    }
+
+    try {
+        const response = await fetch(API_BASE_URL + `/api/adotantes/${id}`, {
+            method: 'DELETE',
+        });
+
+        if (response.status === 204) {
+            // 204 No Content - Sucesso na exclusão
+            window.alert(`Adotante ${nome} excluído com sucesso!`);
+            carregarAdotantes(); 
+            
+        } else if (response.status === 404) {
+             // 404 Not Found - Não existe
+            window.alert('Erro: Adotante não encontrado.');
+            
+        } else {
+            window.alert(`Erro ao tentar excluir. Status: ${response.status}`);
+        }
+        
+    } catch (error) {
+        console.error('Erro de conexão ao excluir adotante:', error);
+        window.alert('Erro de conexão com a API. Verifique se o Backend está ligado.');
+    }
+}
+
+function limparFormularioAdotante() {
     const inputNome = document.getElementById('nomeAdotanteNovo');
     const inputCpf = document.getElementById('cpfAdotanteNovo');
     const inputEndereco = document.getElementById('enderecoAdotanteNovo');
     const dropdawNovoAdotante = document.getElementById("tela-adotantes-botao-novo-adotante");
-
-    if (inputCpf.value.length != 11) {
-        inputCpf.style.border = '2px solid red';
-    } else {
-        inputCpf.style.border = 'none';
-    }
-
-    if (inputEndereco.value == '') {
-        inputEndereco.style.border = '2px solid red';
-    } else {
-        inputEndereco.style.border = 'none';
-    }
-
-    if (inputNome.value == '') {
-        inputNome.style.border = '2px solid red';
-    } else {
-        inputNome.style.border = 'none';
-    }
-
-    if (inputCpf.value != '' && inputEndereco.value != '' && inputNome.value != '') {
-        let nome = inputNome.value;
-        let endereco = inputEndereco.value;
-        let cpf = inputCpf.value;
-        dropdawNovoAdotante.style.display = 'none';
-
-        inputCpf.value = '';
-        inputEndereco.value = '';
-        inputNome.value = '';
-    }
-}
-
-function excluirAdotante() {
-    window.alert('EXCLUIR ADOTANTE');
-}
-
-function editarAdotante() {
-    const dropdawEditarAdotante = document.getElementById('tela-animal-botao-editar-adotante');
     
-    if (dropdawEditarAdotante.style.display == '' || dropdawEditarAdotante.style.display == 'none') {
-        dropdawEditarAdotante.style.display = 'block';
-    } else if (dropdawEditarAdotante.style.display == 'block') {
-        dropdawEditarAdotante.style.display = 'none';
-    }
+    inputNome.value = '';
+    inputCpf.value = '';
+    inputEndereco.value = '';
+    dropdawNovoAdotante.style.display = 'none';
+    
+    adotanteIdEmEdicao = null;
+    document.getElementById('tituloAdotanteForm').textContent = 'Novo Adotante';
+    
+    inputNome.style.border = 'none';
+    inputCpf.style.border = 'none';
+    inputEndereco.style.border = 'none';
 }
 
-function salvarEditarAdotante() {
-    const inputEditarNome = document.getElementById('EditarNomeAdotante');
-    const inputEditarCpf = document.getElementById('editarCpfAdotante');
-    const inputEditarEndereco = document.getElementById("EditarEnderecoAdotante");
-    const dropdawEditarAdotante = document.getElementById('tela-animal-botao-editar-adotante');
+async function iniciarEdicaoAdotante(id) {
+    adotanteIdEmEdicao = id;
+    
+    document.getElementById('tituloAdotanteForm').textContent = `Editar Adotante (ID: ${id})`;
 
-    if (inputEditarCpf.value.length != 11) {
-        inputEditarCpf.style.border = '2px solid red';
-    } else {
-        inputEditarCpf.style.border = 'none';
-    }
+    try {
+        const response = await fetch(API_BASE_URL + `/api/adotantes/${id}`);
+        if (!response.ok) {
+            throw new Error(`Erro ao buscar ID: ${response.status}`);
+        }
+        const adotante = await response.json();
 
-    if (inputEditarEndereco.value == '') {
-        inputEditarEndereco.style.border = '2px solid red';
-    } else {
-        inputEditarEndereco.style.border = 'none';
-    }
-
-    if (inputEditarNome.value == '') {
-        inputEditarNome.style.border = '2px solid red';
-    } else {
-        inputEditarNome.style.border = 'none';
-    }
-
-    if (inputEditarCpf.value != '' && inputEditarEndereco.value != '' && inputEditarNome != '') {
-        let cpf = inputEditarCpf.value;
-        let endereco = inputEditarEndereco.value;
-        let nome = inputEditarNome.value;
-
-        dropdawEditarAdotante.style.display = 'none';
-
-        inputEditarCpf.value = '';
-        inputEditarEndereco.value = '';
-        inputEditarNome.value = '';
-
+        document.getElementById('nomeAdotanteNovo').value = adotante.nome;
+        document.getElementById('cpfAdotanteNovo').value = adotante.cpf;
+        document.getElementById('enderecoAdotanteNovo').value = adotante.endereco;
+        document.getElementById("tela-adotantes-botao-novo-adotante").style.display = 'block';
+        
+    } catch (error) {
+        console.error('Erro ao iniciar edição:', error);
+        window.alert('Não foi possível carregar os dados do adotante para edição.');
+        limparFormularioAdotante();
     }
 }
