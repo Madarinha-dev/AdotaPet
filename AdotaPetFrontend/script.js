@@ -244,13 +244,21 @@ async function carregarEstatisticasHome() {
 
 
 
-async function carregarAnimais() {
+async function carregarAnimais(status = 'disponivel') {
     if (TelaAnimais.style.display !== 'block') {
         return; 
     }
     
+    let endpoint = '/api/animais'; 
+
+    if (status === 'disponivel') {
+        endpoint = '/api/animais/disponiveis';
+    } else if (status === 'adotado') {
+        endpoint = '/api/animais/adotados';
+    } 
+
     try {
-        const response = await fetch(API_BASE_URL + '/api/animais/disponiveis');
+        const response = await fetch(API_BASE_URL + endpoint);
         
         if (!response.ok) {
             throw new Error(`Erro ao buscar animais: Status ${response.status}`);
@@ -262,9 +270,18 @@ async function carregarAnimais() {
         
     } catch (error) {
         console.error('Falha ao carregar animais:', error);
-        window.alert('Não foi possível conectar ou buscar os animais disponíveis.');
+        window.alert('Não foi possível conectar ou buscar os animais. Verifique o console.');
     }
 }
+
+function filtrarAnimaisPorStatus() {
+    const select = document.getElementById('selectFiltroAnimais');
+    if (select) {
+        const statusSelecionado = select.value;
+        carregarAnimais(statusSelecionado); 
+    }
+}
+
 
 function renderizarListaAnimais(animais) {
     const tabelaBody = document.getElementById('tabela-corpo-animais'); 
@@ -434,7 +451,7 @@ async function salvarAnimal() {
         nome: inputNome.value.trim(),
         idade: idade,
         porte: descricaoPorte, 
-        status: "DISPONIVEL" 
+        status: "DISPONIVEL"
     };
 
     if (selectNovoAnimal.value === 'cachorro') {
@@ -442,6 +459,8 @@ async function salvarAnimal() {
     } else if (selectNovoAnimal.value === 'gato') {
         dadosAnimal.corDaPelagem = inputCorDaPelagem.value.trim();
     }
+
+    dadosAnimal.tipoAnimal = selectNovoAnimal.value;
     
     
     let url;
@@ -576,6 +595,8 @@ function salvarEditarAnimal() {
         dadosAnimal.corDaPelagem = inputCorDaPelagem.value;
     }
 
+    dadosAnimal.tipoAnimal = selectTipo.value;
+
     // Chamada PUT para a API
     fetch(API_BASE_URL + `/api/animais/${animalIdEmEdicao}`, {
         method: 'PUT',
@@ -607,6 +628,8 @@ function editarAnimal(id) {
     const dropdawEditarAnimal = document.getElementById("tela-animal-botao-editar-animal");
     if (dropdawEditarAnimal) {
         dropdawEditarAnimal.style.display = 'block';
+    } else {
+        dropdawEditarAnimal.style.display = 'none';
     }
 
     // 3. Busca dados do animal (GET)
@@ -1038,7 +1061,15 @@ async function salvarAdotante() {
     }
 }
 
-async function carregarAdotantes() {
+
+
+function filtrarAdotantes() {
+    const termo = document.getElementById('tela-adotante-segunda-linha-buscador-input').value;
+    carregarAdotantes(termo); 
+}
+
+
+async function carregarAdotantes(termoBusca = '') {
     const tabelaCorpo = document.getElementById('tabela-corpo-adotantes');
     if (!tabelaCorpo) {
         return;
@@ -1047,6 +1078,7 @@ async function carregarAdotantes() {
     tabelaCorpo.innerHTML = '';
     
     try {
+        // Busca TODOS os adotantes, o filtro será feito no lado do cliente
         const response = await fetch(API_BASE_URL + '/api/adotantes');
         if (!response.ok) {
             throw new Error(`Erro HTTP: ${response.status}`);
@@ -1054,7 +1086,18 @@ async function carregarAdotantes() {
         
         const adotantes = await response.json();
         
-        adotantes.forEach(adotante => {
+        // 1. FILTRAGEM LOCAL 
+        const termoLimpo = termoBusca.toLowerCase().trim();
+        const adotantesFiltrados = termoLimpo
+            ? adotantes.filter(adotante => 
+                // Filtra se o nome ou CPF contém o termo de busca
+                adotante.nome.toLowerCase().includes(termoLimpo) || 
+                adotante.cpf.includes(termoLimpo)
+              )
+            : adotantes; // Se não houver termo, usa a lista completa
+        // FIM DA FILTRAGEM
+        
+        adotantesFiltrados.forEach(adotante => {
             const novaLinha = tabelaCorpo.insertRow();
             
             // 1. ID
@@ -1066,9 +1109,10 @@ async function carregarAdotantes() {
             // 3. CPF
             novaLinha.insertCell().textContent = adotante.cpf;
             
-            // 4. ENDEREÇO
-            novaLinha.insertCell().textContent = adotante.endereco;
-            
+            // 4. ENDEREÇO (Você pode querer adicionar de volta o Endereço na tabela HTML)
+            // Se o Endereço não estiver na sua tabela atual, comente ou remova esta linha:
+            novaLinha.insertCell().textContent = adotante.endereco; 
+
             // 5. ADOTADOS 
             novaLinha.insertCell().textContent = adotante.quantidadeDeAnimaisAdotados;
 
@@ -1079,7 +1123,6 @@ async function carregarAdotantes() {
             const btnEditar = document.createElement('button');
             btnEditar.textContent = 'Editar';
             btnEditar.classList.add('btn', 'btn-editar');
-            
             btnEditar.onclick = () => iniciarEdicaoAdotante(adotante.id);
             celulaAcoes.appendChild(btnEditar);
             
@@ -1087,7 +1130,6 @@ async function carregarAdotantes() {
             const btnExcluir = document.createElement('button');
             btnExcluir.textContent = 'Excluir';
             btnExcluir.classList.add('btn', 'btn-excluir');
-            // IMPORTANTE: Passa o ID para a função de exclusão
             btnExcluir.onclick = () => excluirAdotante(adotante.id, adotante.nome);
             celulaAcoes.appendChild(btnExcluir);
         });
@@ -1101,8 +1143,7 @@ async function carregarAdotantes() {
 
 
 async function excluirAdotante(id, nome) {
-    if (!confirm(`Tem certeza que deseja excluir o adotante: ${nome} (ID: ${id})?`)) {
-        return; 
+    if (!window.alert(`ATENÇÃO: Este adotante será excluído imediatamente: ${nome} (ID: ${id}).`)) {
     }
 
     try {

@@ -263,10 +263,10 @@
                         </div>
 
                         <div class="tela-animais-segunda-linha-filtro">
-                            <select name="" id="Y" class="tela-animais-segunda-linha-filtro-select">
-                                <option value="">todos</option>
-                                <option value="adotado">Adotado</option>
-                                <option value="disponivel">Disponível</option>
+                            <select name="" id="selectFiltroAnimais" class="tela-animais-segunda-linha-filtro-select" onchange="filtrarAnimaisPorStatus()">
+                                <option value="disponivel">Disponíveis</option>
+                                <!-- <option value="adotado">Adotado</option> -->
+                                <option value="todos">Todos</option>
                             </select>
                         </div>
                     </div>
@@ -417,7 +417,12 @@
                     <div class="tela-animais-segunda-linha">
 
                         <div class="tela-animais-segunda-linha-buscador">
-                            <input class="tela-animais-segunda-linha-buscador-input" placeholder="Buscar por nome ou CPF" type="search" name="" id="tela-adotante-segunda-linha-buscador-input">
+                            <input class="tela-animais-segunda-linha-buscador-input" 
+                            placeholder="Buscar por nome ou CPF" 
+                            type="search" 
+                            name="" 
+                            id="tela-adotante-segunda-linha-buscador-input"
+                            onkeyup="filtrarAdotantes()">
                         </div>
 
                         <div class="tela-animais-segunda-linha-novo-animais" onclick="novoAdotante()">
@@ -440,6 +445,7 @@
                                         <th class="tela-animais-terceira-linha-div-tabela-thead-th">ID</th>
                                         <th class="tela-animais-terceira-linha-div-tabela-thead-th">NOME</th>
                                         <th class="tela-animais-terceira-linha-div-tabela-thead-th">CPF</th>
+                                        <th class="tela-animais-terceira-linha-div-tabela-thead-th">ENDEREÇO</th>
                                         <th class="tela-animais-terceira-linha-div-tabela-thead-th">ADOTADOS</th>
                                         <th class="tela-animais-terceira-linha-div-tabela-thead-th">AÇÃO</th>
                                     </tr>
