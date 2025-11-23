@@ -2,6 +2,8 @@ const TelaPrincipal = document.getElementById("tela-principal");
 const TelaAnimais = document.getElementById("tela-animais");
 const TelaAdocoes = document.getElementById("tela-adocoes");
 const TelaAdotantes = document.getElementById("tela-adotantes");
+
+
 // Sou foda
 // URL base da API Spring Boot rodando localmente
 const API_BASE_URL = 'http://localhost:8080';
