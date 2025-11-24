@@ -69,15 +69,9 @@ public class AdocaoService {
         // C) Cria e salva o registro de adoção
         Adocao novaAdocao = new Adocao();
         
-        // IMPORTANTE: Aqui você deve definir os OBJETOS, e não apenas os IDs,
-        // pois a entidade Adocao usa @ManyToOne com os objetos Adotante e Animal.
         novaAdocao.setAdotante(adotante); 
         novaAdocao.setAnimal(animal); 
         
-        // Se você não usou a correção anterior na classe Adocao para incluir os IDs transientes,
-        // as linhas 'novaAdocao.setAdotanteId(adotanteId)' e 'novaAdocao.setAnimalId(animalId)'
-        // que estavam no seu código original não são necessárias aqui, pois o objeto já
-        // contém o Adotante/Animal completo.
         
         return adocaoRepository.save(novaAdocao); 
     }
