@@ -656,6 +656,7 @@ table {
     font-size: 23px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     padding: 10px 0px;
+    color: #000000;
 }
 
 .tela-animal-botao-editar-animal-campo-01,
@@ -664,6 +665,7 @@ table {
 .tela-animal-botao-editar-animal-campo-04,
 .tela-animal-botao-editar-animal-campo-05 {
     margin: 5px 0px;
+    color: #000000;
 }
 
 .tela-animal-botao-editar-animal-campo-01-label,
@@ -718,12 +720,14 @@ table {
 }
 
 .tela-animal-botao-editar-animal-salvar {
-    background-color: rgba(0, 0, 0, 0.675);
+    background-color: rgb(0, 0, 0);
     color: white;
+    width: 309px;
     padding: 10px 0px;
     display: flex;
     justify-content: center;
     transition: 0.8s;
+    border-radius: 10px;
 }
 
 .tela-animal-botao-editar-animal-salvar:hover {
