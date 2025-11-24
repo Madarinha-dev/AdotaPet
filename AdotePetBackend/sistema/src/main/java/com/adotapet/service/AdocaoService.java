@@ -3,7 +3,7 @@ package com.adotapet.service;
 import com.adotapet.exceptions.LimiteAdocoesException;
 import com.adotapet.exceptions.AnimalIndisponivelException;
 
-// CORREÇÃO DOS IMPORTS: Removendo 'sistema'
+
 import com.adotapet.model.Adotante;
 import com.adotapet.model.Animal;
 import com.adotapet.repository.AdocaoRepository;
@@ -30,7 +30,6 @@ public class AdocaoService {
     private final AnimalRepository animalRepository;
 
 
-    // Construtor (Simulação de Autowired)
     public AdocaoService(AdocaoRepository adocaoRepository, AdotanteRepository adotanteRepository, AnimalRepository animalRepository) {
         this.adocaoRepository = adocaoRepository;
         this.adotanteRepository = adotanteRepository;
