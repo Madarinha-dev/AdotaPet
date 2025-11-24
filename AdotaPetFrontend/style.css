@@ -183,7 +183,7 @@ body {
 
 .tela-principal-botao-nova-adocao-campo-01-input:focus,
 .tela-principal-botao-nova-adocao-campo-02-input:focus {
-    border: 2px solid #6c63ff;
+    border: 2px solid #000000;
     outline: none;
 }
 
@@ -210,7 +210,7 @@ body {
 }
 
 .tela-principal-botao-nova-adocao-salvar-confirmar-adocao:hover {
-    background-color: #6c63ff;
+    background-color: #000000;
     color: white;
     transform: translateY(-4px);
 }
@@ -513,7 +513,7 @@ table {
 
 
 .tela-animal-botao-novo-animal {
-    background-color: whitesmoke;
+    background-color: rgb(255, 255, 255);
     width: 300px;
     padding: 20px;
     border-radius: 6px;
@@ -529,6 +529,7 @@ table {
 
 .tela-animal-botao-novo-animal-titulo {
     text-align: center;
+    color: #000000;
     font-size: 23px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     padding: 10px 0;
@@ -537,12 +538,15 @@ table {
 
 
 .tela-animal-botao-novo-animal-campo-01,
-.tela-animal-botao-novo-animal-campo-02 {
+.tela-animal-botao-novo-animal-campo-02,
+.tela-animal-botao-novo-animal-campo-03 {
     margin: 10px 0;
+    color: #000000;
 }
 
 .tela-animal-botao-novo-animal-campo-01-label,
-.tela-animal-botao-novo-animal-campo-02-label {
+.tela-animal-botao-novo-animal-campo-02-label,
+.tela-animal-botao-novo-animal-campo-03-label {
     display: block;
     margin-bottom: 4px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -550,7 +554,8 @@ table {
 }
 
 .tela-animal-botao-novo-animal-campo-01-input,
-.tela-animal-botao-novo-animal-campo-02-input {
+.tela-animal-botao-novo-animal-campo-02-input,
+.tela-animal-botao-novo-animal-campo-03-input {
     width: 100%;
     height: 32px;
     border: none;
@@ -560,7 +565,8 @@ table {
 }
 
 .tela-animal-botao-novo-animal-campo-01-input:hover,
-.tela-animal-botao-novo-animal-campo-02-input:hover {
+.tela-animal-botao-novo-animal-campo-02-input:hover,
+.tela-animal-botao-novo-animal-campo-03-input:hover {
     border: 2px solid black;
 }
 
@@ -585,28 +591,6 @@ table {
     border: 2px solid black;
 }
 
-
-
-
-.tela-animal-botao-novo-animal-campo-03 {
-    margin: 5px 0px;
-}
-
-.tela-animal-botao-novo-animal-campo-03-label {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-.tela-animal-botao-novo-animal-campo-03-input {
-    border-radius: 4px;
-    width: 300px;
-    height: 30px;
-    border: none;
-    padding: 5px;
-}
-
-.tela-animal-botao-novo-animal-campo-03-input:hover {
-    border: 2px solid black;
-}
 
 .tela-animal-botao-novo-animal-campo-04,
 .tela-animal-botao-novo-animal-campo-05 {
@@ -634,16 +618,15 @@ table {
 }
 
 
-
-
 .tela-animal-botao-novo-animal-salvar {
-    background-color: rgba(0, 0, 0, 0.675);
+    background-color: rgb(0, 0, 0);
     color: white;
+    width: 308px;
     padding: 10px 0;
     display: flex;
     justify-content: center;
     transition: 0.8s;
-    border-radius: 4px;
+    border-radius: 10px;
 }
 
 .tela-animal-botao-novo-animal-salvar:hover {
