@@ -1,6 +1,6 @@
-package com.adotapet.service; // CORREÇÃO: Pacote ajustado
+package com.adotapet.service; 
 
-// CORREÇÕES NOS IMPORTS: 'sistema' foi removido
+
 import com.adotapet.model.Animal;
 import com.adotapet.repository.AnimalRepository;
 
@@ -21,11 +21,11 @@ public class AnimalService {
 
     // CRUD: Criar / Atualizar (salvar)
     public Animal save(Animal animal){
+        // return animalRepository.save(animal);
         return animalRepository.save(animal);
     }
 
     // CRUD: Buscar por ID
-    // O Controller chama este método (findById)
     public Optional<Animal> findById(Long id) {
         return animalRepository.findById(id);
     }
